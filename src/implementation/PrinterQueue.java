@@ -3,8 +3,8 @@ package implementation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class PrinterQueue {
@@ -14,29 +14,40 @@ public class PrinterQueue {
         StringBuilder sb = new StringBuilder();
         int t = Integer.parseInt(br.readLine());
 
-        for(int i = 0; i < t; i++) {
-            Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < t; i++) {
+            PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
             st = new StringTokenizer(br.readLine());
-
             int n = Integer.parseInt(st.nextToken());
             int m = Integer.parseInt(st.nextToken());
 
-            for(int j = 0; j < n; j++) {
-                st = new StringTokenizer(br.readLine());
-                q.add(Integer.parseInt(st.nextToken()));
+            st = new StringTokenizer(br.readLine());
+
+            int []array = new int[n];
+
+            for (int j = 0; j < n; j++) {
+                int x = Integer.parseInt(st.nextToken());
+                array[j] = x;
+                pq.add(x);
             }
 
-            while(!q.isEmpty()) {
-                int x = q.poll();
+            int count = 0;
 
-                for(int j : q){
-                    if(x < j){
-                        q.add(x);
-                        break;
+            while (!pq.isEmpty()) {
+                for (int j = 0; j < array.length; j++) {
+                    if (pq.peek() == array[j]) {
+                        pq.poll();
+                        count++;
+
+                        if (j == m) {
+                            sb.append(count + "\n");
+                            pq.clear();
+                            break;
+                        }
                     }
                 }
-
+                if (pq.isEmpty()) break;
             }
         }
+        System.out.println(sb);
     }
 }
